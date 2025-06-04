@@ -1,0 +1,75 @@
+{% extends "layout/base.html" %}
+{% block title %}
+Digital Gram Panchayat - Admin Portal
+{% endblock title %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/index_style.css') }}">
+
+    {% include 'nav/home_nav.html' %}
+
+    <main class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Citizen Login</h2>
+                <p>Welcome back! Please login to your account.</p>
+            </div>
+            <form name="form1" method="post" action="user" id="loginForm" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="forgot-password">
+                    <a href="#" id="forgotPassword">Forgot Password?</a>
+                </div>
+                <button type="submit" name="btn" class="submit-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div class="forgot-password">
+                    <p class="mb-0">Don't have an account? 
+                        <a href="/user_register" class="text-primary text-decoration-none">Register Now</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    {% include 'banner/footer.html' %}
+
+    <script>
+        function validateForm() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username.trim() === '') {
+                alert('Please enter your username');
+                return false;
+            }
+            
+            if (password.trim() === '') {
+                alert('Please enter your password');
+                return false;
+            }
+            
+            return true;
+        }
+
+        document.getElementById('forgotPassword').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Please contact your system administrator to reset your password.');
+        });
+
+        // Flash message handler
+        function flashMessage() {
+            if ("{{ flash_message }}" === "True") {
+                alert("{{ data }}");
+            }
+        }
+
+        // Call flash message on load
+        window.onload = flashMessage;
+    </script>
+{% endblock content %}

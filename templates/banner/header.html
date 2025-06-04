@@ -1,0 +1,46 @@
+
+<div class="dashboard-header">
+    {% if user_home != 1 %}
+        <h1 class="header">Welcome, {{ session['user'] }}</h1>
+    {% else %}
+        <h1 class="header"></h1>
+    {% endif %}
+
+    <div class="user-actions">
+        <!-- Button to trigger the modal -->
+        <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#notificationModal">
+            <i class="bi bi-bell"></i>
+            <span id="notification-badge" class="badge bg-danger">0</span>
+        </button>
+        
+    </div>
+</div>
+
+{%include './user_notifications.html' %}
+
+<script>
+    function fetchNotifications() {
+        fetch("{{ url_for('fetch_notifications') }}")
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    document.getElementById("notification-badge").innerText = data.total_notifications;
+
+                    let notificationList = document.getElementById("notification-list");
+                    notificationList.innerHTML = "";  // Clear old notifications
+
+                    data.notifications.forEach(notification => {
+                        let li = document.createElement("li");
+                        li.className = "notification-item";
+                        li.innerHTML = `<p>${notification[0]}</p><small>${notification[1]}</small>`;
+                        notificationList.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => console.error("Error fetching notifications:", error));
+    }
+
+    // Fetch notifications every 5 seconds
+    setInterval(fetchNotifications, 5000);
+    document.addEventListener("DOMContentLoaded", fetchNotifications);
+</script>

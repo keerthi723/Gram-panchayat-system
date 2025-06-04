@@ -1,0 +1,106 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+Vote for Your Candidate
+{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/user_style.css') }}">
+
+<main class="vote-container">
+    <div class="vote-card">
+        <div class="vote-header">
+            <h2>Vote for Your Candidate</h2>
+            <p>Remaining Votes: <strong>{{ votes_remaining }}</strong></p>
+        </div>
+
+        <form method="POST" action="{{ url_for('submit_vote') }}" class="vote-form">
+            {% for candidate in candidates %}
+            <label class="vote-option">
+                <input type="radio" name="candidate_id" value="{{ candidate[0] }}" required>
+                <span class="vote-name">{{ candidate[1] }} - {{ candidate[3] }}</span>
+            </label>
+            {% endfor %}
+            <button type="submit" class="submit-btn"><i class="fas fa-vote-yea"></i> Submit Vote</button>
+        </form>
+    </div>
+</main>
+
+<style>
+    .vote-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #f8fafc;
+        padding: 2rem;
+    }
+
+    .vote-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .vote-header h2 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .vote-header p {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 1.5rem;
+    }
+
+    .vote-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .vote-option {
+        display: flex;
+        align-items: center;
+        background: #f1f5f9;
+        padding: 0.75rem;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .vote-option:hover {
+        background: #e2e8f0;
+    }
+
+    .vote-option input {
+        margin-right: 10px;
+    }
+
+    .vote-name {
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .submit-btn {
+        background: var(--primary-color);
+        color: white;
+        padding: 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+        background: var(--secondary-color);
+    }
+</style>
+
+{% endblock content %}

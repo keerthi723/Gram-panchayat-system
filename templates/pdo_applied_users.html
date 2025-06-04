@@ -1,0 +1,92 @@
+{% extends "layout/base.html" %}
+{% block title %}
+
+Digital Gram Panchayat - Fine
+{% endblock title %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/pdo_style.css') }}">
+
+    {% include 'nav/pdo_nav.html' %}
+    <main class="main-content">
+      {% include 'banner/pdo_header.html'%}
+      
+
+      <div class="data-table-container">
+          <table id="appliedUsersTable" class="table">
+              <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>User Name</th>
+                      <th>Scheme Name</th>
+                      <th>Eligibility</th>
+                      <th>Age</th>
+                      <th>Description</th>
+                      <th>Government</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for row in items %}
+                  <tr>
+                      <td>{{ row[0] }}</td>
+                      <td>{{ row[1] }}</td>
+                      <td>{{ row[4] }}</td>
+                      <td>{{ row[5] }}</td>
+                      <td>{{ row[6] }}</td>
+                      <td>{{ row[7] }}</td>
+                      <td>{{ row[8] }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+      $(document).ready(function() {
+          // Initialize DataTable
+          $('#appliedUsersTable').DataTable({
+              responsive: true,
+              pageLength: 10,
+              order: [[0, 'desc']],
+              language: {
+                  search: "Search users:",
+                  lengthMenu: "Show _MENU_ users per page",
+                  info: "Showing _START_ to _END_ of _TOTAL_ users"
+              }
+          });
+
+          // Mobile sidebar toggle
+          $('.mobile-toggle').click(function() {
+              $('.sidebar').toggleClass('active');
+          });
+
+          // Close sidebar when clicking outside on mobile
+          $(document).click(function(event) {
+              if (!$(event.target).closest('.sidebar, .mobile-toggle').length) {
+                  $('.sidebar').removeClass('active');
+              }
+          });
+
+          // Flash message handler
+          function flashMessage() {
+              if ("{{ flash_message }}" == "True") {
+                  alert("{{ data }}");
+              }
+          }
+          
+          // Call flash message on load
+          flashMessage();
+      });
+  </script>
+
+
+  {%endblock content%}

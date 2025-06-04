@@ -1,0 +1,82 @@
+{% extends "layout/base.html" %}
+{% block title %}
+
+Digital Gram Panchayat - Fine
+{% endblock title %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/admin_style.css') }}">
+
+    {% include 'nav/admin_nav.html' %}
+
+    <main class="main-content">
+      <div class="header">
+          <h2>Add New Scheme</h2>
+      </div>
+
+      <div class="card">
+          <form name="form1" method="post" action="admin_add_scheme">
+              <div class="form-group">
+                  <label class="form-label">Scheme Name</label>
+                  <input class="form-control" name="scheme_name" type="text" required>
+              </div>
+
+              <div class="form-group">
+                  <label class="form-label">Eligibility Criteria</label>
+                  <textarea class="form-control" name="scheme_eligibility_criteria" rows="3" required></textarea>
+              </div>
+
+              <div class="form-group">
+                  <label class="form-label">Age Requirement</label>
+                  <input class="form-control" name="age" type="number" min="10" max="90" step="1" required>
+                  <small style="color: #666;">Age must be between 10 and 90 years</small>
+              </div>
+
+              <div class="form-group">
+                  <label class="form-label">Description</label>
+                  <textarea class="form-control" name="description" rows="4" required></textarea>
+              </div>
+
+              <div class="form-group">
+                  <label class="form-label">Government Type</label>
+                  <select class="form-select" name="govenment">
+                      <option value="Central">Central Government</option>
+                      <option value="State">State Government</option>
+                  </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                  <button type="submit" class="btn">
+                      <i class="fas fa-plus-circle"></i> Add Scheme
+                  </button>
+              </div>
+          </form>
+      </div>
+  </main>
+
+  <script>
+      // Toggle sidebar
+      const toggleBtn = document.querySelector('.toggle-sidebar');
+      const sidebar = document.querySelector('.sidebar');
+      const mainContent = document.querySelector('.main-content');
+
+      toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+      });
+
+      // Flash message
+      function flashMessage() {
+          if ("{{ flash_message }}" == "True") {
+              alert("{{ data }}");
+          }
+      }
+
+      // Call flash message on load
+      window.onload = flashMessage;
+  </script>
+{%endblock content%}

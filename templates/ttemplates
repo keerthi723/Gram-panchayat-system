@@ -1,0 +1,523 @@
+
+//static files
+{{ url_for('static', filename='style.css') }}
+
+//base filename
+{% extends "layout/base.html" %}
+{% block title %}
+  
+
+{% endblock title %}
+{% block content %}
+ 
+
+{% endblock %}
+
+//include
+{% include 'nav/user_nav.html' %}
+{% include 'nav/admin_nav.html' %}
+{% include 'nav/pdo_nav.html' %}
+{% include 'nav/home_nav.html' %}
+
+
+
+
+<header id="site-header" class="fixed-top">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light stroke py-lg-0">
+           <h1><a class="navbar-brand pe-xl-5 pe-lg-4" href="#">
+                    Digital<span class="sublog">Gram Panchayat</span>
+                </a></h1>
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon fa icon-expand fa-bars"></span>
+                <span class="navbar-toggler-icon fa icon-close fa-times"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-lg-auto my-2 my-lg-0 navbar-nav-scroll">
+                   <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin_home">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/admin_add_pdo">ADD PDO</a>
+                    </li>
+                      <li class="nav-item">
+                        <a class="nav-link " href="/admin_pdo_details">PDO DETAILS</a>
+                    </li>
+                      <li class="nav-item">
+                        <a class="nav-link " href="/admin_view_user">VIEW USER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/admin_add_scheme">ADD SCHEME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/admin_news">News Update</a>
+                    </li>
+                      <li class="nav-item">
+                        <a class="nav-link " href="/admin_view_request">VIEW REQUEST</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/admin_view_candidates">View Voting</a>
+                    </li>
+                     
+                    <li class="nav-item">
+                        <a class="nav-link " href="/admin_add_candidate">add Voting</a>
+                    </li>
+                     
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">LOGOUT</a>
+                    </li>
+                   
+                  
+
+                </ul>
+             
+
+                <!-- //toggle switch for light and dark theme -->
+                <!-- search popup -->
+              
+                <!-- /search popup -->
+            </div>
+            <!-- toggle switch for light and dark theme -->
+            <div class="mobile-position">
+                <nav class="navigation">
+                    <div class="theme-switch-wrapper">
+                       
+                    </div>
+                </nav>
+            </div>
+            <!-- //toggle switch for light and dark theme -->
+        </nav>
+    </div>
+</header>
+
+
+
+
+
+:root {
+    --primary-color: #2c5282;
+    --secondary-color: #ed8936;
+    --accent-color: #f6ad55;
+    --bg-gray: #f7fafc;
+    --text-gray: #4a5568;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-gray);
+    min-height: 100vh;
+}
+
+/* Enhanced Sidenav */
+.sidenav {
+    height: 100vh;
+    width: 280px;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    padding-top: 20px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.sidenav .navbar-brand {
+    color: var(--primary-color);
+    padding: 20px 25px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.sidenav .sublog {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+    margin-left: 5px;
+}
+
+.nav-section {
+    padding: 0 15px;
+    margin-bottom: 15px;
+}
+
+.nav-section-title {
+    color: var(--text-gray);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
+
+.sidenav .nav-link {
+    padding: 12px 20px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    margin: 4px 0;
+    transition: all 0.3s;
+}
+
+.sidenav .nav-link i {
+    margin-right: 12px;
+    font-size: 1.1rem;
+}
+
+.sidenav .nav-link:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+}
+
+.sidenav .nav-link.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Main content wrapper */
+.main-content {
+    margin-left: 280px;
+    padding: 30px;
+    transition: all 0.3s;
+}
+
+/* Enhanced Form styles */
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.breadcrumb {
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-gray);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.1);
+    outline: none;
+}
+
+.submit-btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.submit-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    color: var(--text-gray);
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .sidenav {
+        transform: translateX(-100%);
+    }
+
+    .sidenav.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}        .quick-actions {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.quick-actions-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.quick-actions-menu {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    display: none;
+}
+
+.quick-actions-menu.active {
+    display: block;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.quick-action-item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-gray);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.quick-action-item:hover {
+    background: #f8f9fa;
+    color: var(--primary-color);
+}
+
+/* Form Autosave */
+.autosave-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: none;
+    animation: fadeInOut 2s ease;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Help Tooltips */
+.help-tooltip {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+    color: var(--text-gray);
+}
+
+.help-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.help-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Form Progress Bar */
+.form-progress {
+    height: 4px;
+    background: #edf2f7;
+    margin-bottom: 30px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.form-progress-bar {
+    height: 100%;
+    background: var(--primary-color);
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+/* Enhanced Form Validation */
+.form-control.valid {
+    border-color: #68d391;
+}
+
+.validation-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+}
+
+.form-control.valid + .validation-icon {
+    display: block;
+    color: #68d391;
+}
+
+/* Location Map Preview */
+.map-preview {
+    height: 200px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #e2e8f0;
+}
+
+/* Image Upload Preview */
+.image-upload-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: none;
+    margin-top: 10px;
+}
+
+/* Form validation styles */
+.form-control.invalid {
+    border-color: #fc8181;
+}
+
+.error-message {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* Password strength indicator */
+.password-strength {
+    margin-top: 8px;
+    height: 4px;
+    background: #edf2f7;
+    border-radius: 2px;
+}
+
+.password-strength-bar {
+    height: 100%;
+    width: 0;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.strength-weak { background-color: #fc8181; width: 33%; }
+.strength-medium { background-color: #f6ad55; width: 66%; }
+.strength-strong { background-color: #68d391; width: 100%; }
+
+
+
+
+<div class="card">
+    <div class="card-header">
+        <strong>{{ suggestion[1] }}</strong> 
+        <span style="float: right;">{{ suggestion[2] }}</span>
+    </div>
+    <div class="card-body">
+        <p>{{ suggestion[3] }} - {{ suggestion[4] }}</p>
+        <a href="{{ url_for('pdo_clear_suggestion', id=suggestion[0]) }}" class="btn btn-danger">Clear</a>
+    </div>
+</div>

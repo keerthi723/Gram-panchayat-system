@@ -1,0 +1,137 @@
+{% extends "layout/base.html" %}
+{% block title %}
+
+Digital Gram Panchayat - Add Complaint
+{% endblock title %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/user_style.css') }}">
+
+    {% include 'nav/user_nav.html' %}
+
+
+    <main class="main-content">
+        {%include 'banner/header.html'%}
+        <div class="complaint-card">
+            <div class="card-header">
+                <h3 class="title-w3l">Submit a Complaint</h3>
+                <p>Please provide details about your complaint</p>
+            </div>
+
+            <form name="complaintForm" method="post" action="user_add_complaint" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label class="form-label">Complaint Description</label>
+                    <textarea 
+                        name="complaint_description" 
+                        class="form-control" 
+                        placeholder="Please provide detailed description of your complaint..."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input 
+                        type="text" 
+                        name="complaint_on" 
+                        class="form-control" 
+                        placeholder="Enter the location of the issue"
+                        required
+                    >
+                </div>
+
+
+                
+
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Complaint
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+    {%include 'banner/chatbot.html'%}
+    <script>
+        // Mobile menu toggle
+        function toggleSidebar() {
+            document.querySelector('.side-nav').classList.toggle('active');
+        }
+
+        // Show/hide mobile menu toggle based on screen size
+        function updateMenuToggle() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            if (window.innerWidth <= 768) {
+                menuToggle.style.display = 'block';
+            } else {
+                menuToggle.style.display = 'none';
+                document.querySelector('.side-nav').classList.remove('active');
+            }
+        }
+
+        window.addEventListener('resize', updateMenuToggle);
+        window.addEventListener('load', updateMenuToggle);
+
+        function selectType(element, type) {
+            document.querySelectorAll('.type-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            // Add a hidden input for the selected type
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'complaint_type';
+            hiddenInput.value = type;
+            
+            // Remove any existing hidden input
+            const existing = document.querySelector('input[name="complaint_type"]');
+            if (existing) existing.remove();
+            
+            document.forms.complaintForm.appendChild(hiddenInput);
+        }
+
+        function validateForm() {
+            const description = document.querySelector('textarea[name="complaint_description"]').value;
+            const location = document.querySelector('input[name="complaint_on"]').value;
+           
+
+            if (!description.trim()) {
+                alert('Please provide a complaint description');
+                return false;
+            }
+
+            if (!location.trim()) {
+                alert('Please provide the location');
+                return false;
+            }
+
+            return true;
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const previewArea = document.getElementById('previewArea');
+            previewArea.innerHTML = '';
+
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const div = document.createElement('div');
+                        div.className = 'preview-item';
+                        div.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <button type="button" class="remove-attachment" onclick="this.parentElement.remove()">×</button>
+                        `;
+                        previewArea.appendChild(div);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+</script>
+{%endblock content%}

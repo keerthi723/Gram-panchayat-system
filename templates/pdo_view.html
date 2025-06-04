@@ -1,0 +1,120 @@
+{% extends "layout/base.html" %}
+{% block title %}
+
+Digital Gram Panchayat - Fine
+{% endblock title %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/pdo_style.css') }}">
+
+    {% include 'nav/pdo_nav.html' %}
+
+    <main class="main-content">
+{%include 'banner/pdo_header.html'%}
+<br><br><br>
+      <div class="row">
+          <div class="col-md-6 col-lg-4">
+              <div class="card">
+                  <h3>
+                      <a href="pdo_view_payment" class="card-link">
+                          <i class="fas fa-money-bill-wave"></i>
+                          View Payment
+                      </a>
+                  </h3>
+              </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+              <div class="card">
+                  <h3>
+                      <a href="pdo_view_family_details" class="card-link">
+                          <i class="fas fa-family"></i>
+                          View Family Details
+                      </a>
+                  </h3>
+              </div>
+          </div>
+          <!-- <div class="col-md-6 col-lg-4">
+              <div class="card">
+                  <h3>
+                      <a href="pdo_view_complaint" class="card-link">
+                          <i class="fas fa-exclamation-circle"></i>
+                          View Complaint
+                      </a>
+                  </h3>
+              </div>
+          </div> -->
+          <div class="col-md-6 col-lg-4">
+              <div class="card">
+                  <h3>
+                      <a href="pdo_view_action" class="card-link">
+                          <i class="fas fa-tasks"></i>
+                          View Action
+                      </a>
+                  </h3>
+              </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+              <div class="card">
+                  <h3>
+                      <a href="pdo_view_death_birth" class="card-link">
+                          <i class="fas fa-book-medical"></i>
+                          View Death & Birth
+                      </a>
+                  </h3>
+              </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+              <div class="card">
+                  <h3>
+                      <a href="pdo_view_scheme_details" class="card-link">
+                          <i class="fas fa-project-diagram"></i>
+                          View Scheme
+                      </a>
+                  </h3>
+              </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <h3>
+                    <a href="pdo_view_suggestions" class="card-link">
+                        <i class="fas fa-chart-bar"></i>
+                        View Suggestion
+                    </a>
+                </h3>
+            </div>
+        </div>
+          <!-- <div class="col-md-6 col-lg-4">
+              <div class="card">
+                  <h3>
+                      <a href="pdo_view_report" class="card-link">
+                          <i class="fas fa-chart-bar"></i>
+                          Report
+                      </a>
+                  </h3>
+              </div>
+          </div> -->
+      </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+      $(document).ready(function() {
+          $('.mobile-toggle').click(function() {
+              $('.sidebar').toggleClass('active');
+          });
+
+          // Close sidebar when clicking outside on mobile
+          $(document).click(function(event) {
+              if (!$(event.target).closest('.sidebar, .mobile-toggle').length) {
+                  $('.sidebar').removeClass('active');
+              }
+          });
+      });
+  </script>
+
+  {%endblock content%}

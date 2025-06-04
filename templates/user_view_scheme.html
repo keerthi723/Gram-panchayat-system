@@ -1,0 +1,234 @@
+{% extends "layout/base.html" %}
+{% block title %}
+
+Digital Gram Panchayat - Scheme
+{% endblock title %}
+{% block content %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/user_style.css') }}">
+
+    {% include 'nav/user_nav.html' %}
+    
+    <main class="main-content">
+      {%include 'banner/header.html'%}
+      <h1 class="text-3xl font-bold text-center mb-8">Government Schemes</h1>
+        <div id="schemeContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {%if items%}
+          {% for row in items %}
+          <div class="scheme-card" data-category="{{ row[5] }}" data-age="{{ row[3] }}">
+              <div class="scheme-header">
+                  <h3 class="scheme-title">{{ row[1] }}</h3>
+                  <span class="scheme-category">{{ row[5] }}</span>
+              </div>
+
+              <div class="scheme-content">
+                  <div class="scheme-info">
+                      <i class="fas fa-check-circle text-green-500"></i>
+                      <p class="text-gray-600">{{ row[2] }}</p>
+                  </div>
+                  <div class="scheme-info">
+                      <i class="fas fa-user-clock text-blue-500"></i>
+                      <p class="text-gray-600">Age: {{ row[3] }}</p>
+                  </div>
+                  <div class="scheme-info">
+                      <i class="fas fa-info-circle text-gray-500"></i>
+                      <p class="text-gray-600">{{ row[4] }}</p>
+                  </div>
+              </div>
+
+              <div class="scheme-actions">
+                  <a href="/user_view_scheme_1/{{ row[0] }}" class="apply-btn">
+                      <span>Apply Now</span>
+                      <i class="fas fa-arrow-right"></i>
+                  </a>
+                  
+              </div>
+          </div>
+          {% endfor %}
+
+      </div>
+{%else%}
+      <div id="noResultsMessage" class="hidden text-center py-8">
+          <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+              <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+              <h3 class="text-2xl font-semibold mb-4">No Schemes Found</h3>
+              
+              
+          </div>
+        {%endif%}
+      </div>
+  </main>
+{%include 'banner/chatbot.html'%}
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="alert">
+      <i class="fas fa-check-circle"></i>
+      <span id="toastMessage"></span>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Elements
+          const searchInput = document.getElementById('searchInput');
+          const categoryFilter = document.getElementById('categoryFilter');
+          const ageFilter = document.getElementById('ageFilter');
+          const applyFilters = document.getElementById('applyFilters');
+          const clearFilters = document.getElementById('clearFilters');
+          const resetSearch = document.getElementById('resetSearch');
+          const schemeContainer = document.getElementById('schemeContainer');
+          const noResultsMessage = document.getElementById('noResultsMessage');
+          const navToggle = document.querySelector('.nav-toggle');
+          const sideNav = document.querySelector('.side-nav');
+          const toast = document.getElementById('toast');
+
+          // Mobile navigation toggle
+          if (navToggle) {
+              navToggle.addEventListener('click', () => {
+                  sideNav.classList.toggle('show');
+              });
+          }
+
+          // Toast notification function
+          function showToast(message, type = 'success') {
+              const toastMessage = document.getElementById('toastMessage');
+              toastMessage.textContent = message;
+              toast.className = `toast ${type} show`;
+              
+              setTimeout(() => {
+                  toast.className = 'toast';
+              }, 3000);
+          }
+
+          // Bookmark functionality with enhanced features
+          const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+          const savedSchemes = JSON.parse(localStorage.getItem('savedSchemes')) || [];
+
+          bookmarkButtons.forEach(button => {
+              const schemeId = button.dataset.schemeId;
+              if (savedSchemes.includes(schemeId)) {
+                  button.classList.add('saved');
+                  button.innerHTML = '<i class="fas fa-bookmark"></i>';
+              }
+
+              button.addEventListener('click', function() {
+                  if (savedSchemes.includes(schemeId)) {
+                      const index = savedSchemes.indexOf(schemeId);
+                      savedSchemes.splice(index, 1);
+                      button.classList.remove('saved');
+                      button.innerHTML = '<i class="far fa-bookmark"></i>';
+                      showToast('Scheme removed from bookmarks');
+                  } else {
+                      savedSchemes.push(schemeId);
+                      button.classList.add('saved');
+                      button.innerHTML = '<i class="fas fa-bookmark"></i>';
+                      showToast('Scheme added to bookmarks');
+                  }
+                  localStorage.setItem('savedSchemes', JSON.stringify(savedSchemes));
+              });
+          });
+
+          // Enhanced search and filter functionality with debounce
+          function debounce(func, wait) {
+              let timeout;
+              return function executedFunction(...args) {
+                  const later = () => {
+                      clearTimeout(timeout);
+                      func(...args);
+                  };
+                  clearTimeout(timeout);
+                  timeout = setTimeout(later, wait);
+              };
+          }
+
+          function filterSchemes() {
+              const searchTerm = searchInput.value.toLowerCase();
+              const selectedCategory = categoryFilter.value;
+              const selectedAge = ageFilter.value;
+              let visibleSchemes = 0;
+
+              document.querySelectorAll('.scheme-card').forEach(card => {
+                  const text = card.textContent.toLowerCase();
+                  const category = card.dataset.category;
+                  const age = card.dataset.age;
+
+                  const matchesSearch = text.includes(searchTerm);
+                  const matchesCategory = !selectedCategory || category === selectedCategory;
+                  const matchesAge = !selectedAge || age.includes(selectedAge);
+
+                  if (matchesSearch && matchesCategory && matchesAge) {
+                      card.style.display = '';
+                      visibleSchemes++;
+                  } else {
+                      card.style.display = 'none';
+                  }
+              });
+
+              noResultsMessage.classList.toggle('hidden', visibleSchemes > 0);
+              schemeContainer.classList.toggle('hidden', visibleSchemes === 0);
+          }
+
+          // Event Listeners with debounce for search
+          searchInput.addEventListener('input', debounce(filterSchemes, 300));
+          categoryFilter.addEventListener('change', filterSchemes);
+          ageFilter.addEventListener('change', filterSchemes);
+          applyFilters.addEventListener('click', filterSchemes);
+
+          // Clear filters functionality
+          function clearAllFilters() {
+              searchInput.value = '';
+              categoryFilter.selectedIndex = 0;
+              ageFilter.selectedIndex = 0;
+              filterSchemes();
+              showToast('Filters cleared');
+          }
+
+          clearFilters.addEventListener('click', clearAllFilters);
+          resetSearch.addEventListener('click', clearAllFilters);
+
+          // Save filter preferences to localStorage
+          function saveFilterPreferences() {
+              const preferences = {
+                  category: categoryFilter.value,
+                  age: ageFilter.value,
+                  search: searchInput.value
+              };
+              localStorage.setItem('filterPreferences', JSON.stringify(preferences));
+          }
+
+          // Load saved preferences on page load
+          function loadFilterPreferences() {
+              const savedPreferences = JSON.parse(localStorage.getItem('filterPreferences'));
+              if (savedPreferences) {
+                  categoryFilter.value = savedPreferences.category;
+                  ageFilter.value = savedPreferences.age;
+                  searchInput.value = savedPreferences.search;
+                  filterSchemes();
+              }
+          }
+
+          // Save preferences when filters change
+          [categoryFilter, ageFilter, searchInput].forEach(element => {
+              element.addEventListener('change', saveFilterPreferences);
+          });
+
+          // Initial load
+          loadFilterPreferences();
+
+          // Handle keyboard shortcuts
+          document.addEventListener('keydown', function(e) {
+              // Ctrl/Cmd + / to focus search
+              if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                  e.preventDefault();
+                  searchInput.focus();
+              }
+              // Esc to clear filters
+              if (e.key === 'Escape') {
+                  clearAllFilters();
+              }
+          });
+      });
+  </script>
+
+{%endblock content%}

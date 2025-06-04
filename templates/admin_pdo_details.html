@@ -1,0 +1,81 @@
+{% extends "layout/base.html" %}
+{% block title %}
+
+Digital Gram Panchayat - Fine
+{% endblock title %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/admin_style.css') }}">
+
+    {% include 'nav/admin_nav.html' %}
+    <div class="main-content">
+      <div class="page-header">
+          <h1 class="page-title">PDO Details</h1>
+          <div class="breadcrumb">Dashboard / PDO Details</div>
+      </div>
+
+      <div class="table-container">
+          <div class="table-scroll">
+              <table class="data-table">
+                  <thead>
+                      <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Contact</th>
+                          <th>Email</th>
+                          <th>Address</th>
+                          <th>Actions</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for row in items %}
+                      <tr>
+                          <td>{{ row[0] }}</td>
+                          <td>{{ row[1] }}</td>
+                          <td>{{ row[2] }}</td>
+                          <td>{{ row[3] }}</td>
+                          <td>{{ row[4] }}</td>
+                          <td>
+                              <a href="/admin_pdo_details_edit/{{ row[0] }}" class="action-btn edit-btn">
+                                  <i class="fas fa-edit"></i> Edit
+                              </a>
+                              <a href="/admin_pdo_details_delete/{{ row[0] }}" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this PDO?')">
+                                  <i class="fas fa-trash"></i> Delete
+                              </a>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+
+  <script>
+      function flashMessage() {
+          if ("{{ flash_message }}" == "True") {
+              alert("{{ data }}");
+          }
+      }
+
+      // Mobile menu toggle
+      function toggleMenu() {
+          document.querySelector('.sidenav').classList.toggle('active');
+      }
+
+      // Add mobile menu button
+      if (window.innerWidth <= 768) {
+          const menuBtn = document.createElement('button');
+          menuBtn.className = 'menu-toggle';
+          menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+          menuBtn.onclick = toggleMenu;
+          document.body.appendChild(menuBtn);
+      }
+  </script>
+
+  {%endblock content%}

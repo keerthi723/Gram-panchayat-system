@@ -1,0 +1,7 @@
+<div class="dashboard-header">
+    {% if user_home != 1 %}
+        <h1 class="header">Welcome, {{ session['user'] }}</h1>
+    {% else %}
+        <h1 class="header"></h1>
+    {% endif %}
+</div>

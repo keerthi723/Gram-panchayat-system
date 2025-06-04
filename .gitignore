@@ -1,0 +1,13 @@
+# Ignore Python virtual environment
+venv/
+
+# Ignore Python bytecode cache
+__pycache__/
+
+# Ignore IDE settings (like PyCharm or VS Code)
+.idea/
+
+# Ignore temporary folders or files
+tmp/
+*.log
+*.tmp

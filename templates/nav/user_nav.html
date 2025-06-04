@@ -1,0 +1,48 @@
+ <!-- Mobile menu toggle -->
+    <button class="menu-toggle" onclick="toggleSidebar()" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <nav class="side-nav">
+        <h2>Digital Panchayat</h2>
+        <a href="/user_home"><i class="fas fa-home"></i>Home</a>
+        <a href="/user_pay_fine"><i class="fas fa-money-bill-wave"></i>Pay Fine</a>
+        <a href="/user_add_complaint" ><i class="fas fa-exclamation-circle"></i>Complaints</a>
+        <a href="/user_add_death_birth"><i class="fas fa-file-alt"></i>Death & Birth</a>
+        <a href="/user_payment_history"><i class="fas fa-history"></i>Payments</a>
+        <a href="/user_view_scheme"><i class="fas fa-hand-holding-heart"></i>Schemes</a>
+        <a href="/user_view_service"><i class="fas fa-cogs"></i>Services</a>
+
+        <div id="suggestion-link">
+            {% if session['voting_status'] == 1 %}
+                <a href="/suggestion_vote"><i class="fas fa-info-circle"></i> Suggestion</a>
+            {% else %}
+                <a href="/user_suggestion"><i class="fas fa-cogs"></i> Suggestion Box</a>
+            {% endif %}
+        </div>
+        
+        <a href="/user_applied_users"><i class="fas fa-users"></i>Applications</a>
+        <a href="/" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    </nav>
+
+    
+    <script>
+        function updateSuggestionLink() {
+            fetch('/get_voting_status')
+                .then(response => response.json())
+                .then(data => {
+                    let suggestionLink = document.getElementById("suggestion-link");
+    
+                    if (data.voting_status == 1) {
+                        suggestionLink.innerHTML = 
+                            '<a href="/suggestion_vote"><i class="fas fa-info-circle"></i> Suggestion</a>';
+                    } else {
+                        suggestionLink.innerHTML = 
+                            '<a href="/user_suggestion"><i class="fas fa-cogs"></i> Suggestion Box</a>';
+                    }
+                })
+                .catch(error => console.error("Error fetching voting status:", error));
+        }
+    
+        setInterval(updateSuggestionLink, 3000);  // Check every 3 seconds
+    </script>

@@ -1,0 +1,136 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+-->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>KoDeal - Business Category Bootstrap Responsive Template | About :: W3layouts</title>
+    <!--/google-fonts -->
+    <link href="//fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!--//google-fonts -->
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/style-starter.css">
+		  <style>
+  {% include 'css/style-starter.css' %}
+  </style>
+</head>
+
+<body onLoad="flashMessage()">
+	<!-- header --> <script>
+    function flashMessage() {
+      if ("{{ flash_message }}" == "True") {
+        alert("{{ data }}");
+		window.location.href = "/pdo_view_complaint";
+
+      }
+    }
+  </script>
+    <!--/Header-->
+    {% include 'nav/pdo_nav.html' %}
+    <!--//Header-->
+    <!-- breadcrumb -->
+    {%include 'banner/breadcrumb.html'%}
+    <!--//breadcrumb-->
+    <!-- feature with photo1 -->
+ 
+    <!-- //feature with photo1 -->
+    <!-- /features-->
+ 
+    <!-- //features-->
+    <!--/team-sec-->
+    <section class="w3l-team-main team py-5" id="team">
+        <div class="container py-lg-5">
+          <div class="w3l-heaser-sec text-center">
+               
+                <h3 class="title-w3l mb-4">PDO
+                    <span class="span-bold">Home</span>
+                </h3>
+				
+                <form name="form1" method="post" action="admin_log">
+                  <table width="423" height="195" border="0" align="center">
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </table>
+            </form>
+            </div>
+			
+            
+        </div>
+    </section>
+    <!--//team-sec-->
+    <!--/w3l-project-->
+  
+    <!--//w3l-project-->
+    <!--/w3l-footer-29-main-->
+    {%include 'banner/footer.html'%}
+    <!--//footer-9 -->
+    <!-- Js scripts -->
+    <!-- Template JavaScript -->
+    <script src="assets/js/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/theme-change.js"></script>
+    <!-- MENU-JS -->
+    <script>
+        $(window).on("scroll", function() {
+            var scroll = $(window).scrollTop();
+
+            if (scroll >= 80) {
+                $("#site-header").addClass("nav-fixed");
+            } else {
+                $("#site-header").removeClass("nav-fixed");
+            }
+        });
+
+        //Main navigation Active Class Add Remove
+        $(".navbar-toggler").on("click", function() {
+            $("header").toggleClass("active");
+        });
+        $(document).on("ready", function() {
+            if ($(window).width() > 991) {
+                $("header").removeClass("active");
+            }
+            $(window).on("resize", function() {
+                if ($(window).width() > 991) {
+                    $("header").removeClass("active");
+                }
+            });
+        });
+
+    </script>
+    <!-- //MENU-JS -->
+
+    <!-- disable body scroll which navbar is in active -->
+    <script>
+        $(function() {
+            $('.navbar-toggler').click(function() {
+                $('body').toggleClass('noscroll');
+            })
+        });
+
+    </script>
+    <!-- //disable body scroll which navbar is in active -->
+
+    <!-- //bootstrap -->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

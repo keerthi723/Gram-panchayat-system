@@ -1,9 +1,10 @@
+import os
 import ar_master
 from flask import Flask, render_template, flash, request, session, current_app, send_from_directory, redirect, url_for
 from flask import jsonify
 app = Flask(__name__, static_folder="static")
 app.config.from_object(__name__)
-app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-only-change-me')
 mm = ar_master.master_flask_code()
 
 

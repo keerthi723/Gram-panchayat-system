@@ -10,11 +10,16 @@ class master_flask_code:
         self.port = int(os.environ.get('DB_PORT', '3306'))
         self.database = os.environ.get('DB_NAME', 'python_digital_gram_panchayat')
 
-    def connect(self):
+        def connect(self):
+        options = {}
+        ca = os.environ.get('DB_SSL_CA')
+        if ca:
+            options = {'ssl_ca': ca, 'ssl_verify_cert': True,
+                       'ssl_verify_identity': True}
         return pymysql.connect(user=self.user, password=self.password,
                                host=self.host, port=self.port,
-                               database=self.database, charset='utf8')
-
+                               database=self.database, charset='utf8',
+                               **options)
     def _run(self, qry, values=None, write=False):
         conn = self.connect()
         try:

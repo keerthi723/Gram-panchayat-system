@@ -1,72 +1,53 @@
+import os
 import pymysql
+
+
 class master_flask_code:
     def __init__(self):
-        self.user = 'root'
-        self.password = ''
-        self.host = 'localhost'
-        self.database = 'python_digital_gram_panchayat'
-    def find_max_id(self,table):
-        conn = pymysql.connect(user=self.user, password=self.password, host=self.host, database=self.database,charset='utf8')
-        cursor = conn.cursor()
-        cursor.execute("SELECT id FROM "+table)
-        data = cursor.fetchall()
-        maxin = len(data)
-        if maxin == 0:
-            maxin = 1
-        else:
-            maxin += 1
-        return maxin
-    def insert_query(self,qry):
-        conn = pymysql.connect(user=self.user, password=self.password, host=self.host, database=self.database,charset='utf8')
-        cursor = conn.cursor()
-        result=cursor.execute(qry)
-        conn.commit()
-        conn.close()
-        return result
-    
+        self.user = os.environ.get('DB_USER', 'root')
+        self.password = os.environ.get('DB_PASSWORD', '')
+        self.host = os.environ.get('DB_HOST', 'localhost')
+        self.port = int(os.environ.get('DB_PORT', '3306'))
+        self.database = os.environ.get('DB_NAME', 'python_digital_gram_panchayat')
+
+    def connect(self):
+        return pymysql.connect(user=self.user, password=self.password,
+                               host=self.host, port=self.port,
+                               database=self.database, charset='utf8')
+
+    def _run(self, qry, values=None, write=False):
+        conn = self.connect()
+        try:
+            cursor = conn.cursor()
+            if values is None:
+                result = cursor.execute(qry)
+            else:
+                result = cursor.execute(qry, values)
+            if write:
+                conn.commit()
+                return result
+            return cursor.fetchall()
+        finally:
+            conn.close()
+
+    def find_max_id(self, table):
+        data = self._run("SELECT id FROM " + table)
+        return len(data) + 1
+
+    def insert_query(self, qry):
+        return self._run(qry, write=True)
+
     def insert_query2(self, qry, values=None):
-        conn = pymysql.connect(user=self.user, password=self.password, host=self.host, database=self.database,charset='utf8')
-        cursor = conn.cursor()
-        if values:
-            result = cursor.execute(qry, values)
-        else:
-            result = cursor.execute(qry)
-        conn.commit()
-        conn.close()
-        return result
+        return self._run(qry, values, write=True)
 
-    def select_login(self,qry):
-        conn = pymysql.connect(user=self.user, password=self.password, host=self.host, database=self.database,charset='utf8')
-        cursor = conn.cursor()
-        cursor.execute(qry)
-        data = cursor.fetchall()
-        check = len(data)
-        if check == 0:
-            return 'no'
-        else:
-            return 'yes'
-    def select_single_colum(self,table,colum):
-        conn = pymysql.connect(user=self.user, password=self.password, host=self.host, database=self.database,charset='utf8')
-        qry1=("select "+colum+"  from "+table)
-        cursor = conn.cursor()
-        cursor.execute(qry1)
-        data = cursor.fetchall()
-        return data
+    def select_login(self, qry):
+        return 'no' if len(self._run(qry)) == 0 else 'yes'
 
-    def select_direct_query(self,qry):
-        conn = pymysql.connect(user=self.user, password=self.password, host=self.host, database=self.database,charset='utf8')
-        cursor = conn.cursor()
-        cursor.execute(qry)
-        data = cursor.fetchall()
-        return data
-    
+    def select_single_colum(self, table, colum):
+        return self._run("select " + colum + " from " + table)
+
+    def select_direct_query(self, qry):
+        return self._run(qry)
+
     def select_direct_query2(self, qry, values=None):
-        conn = pymysql.connect(user=self.user, password=self.password, host=self.host, database=self.database,charset='utf8')
-        cursor = conn.cursor()
-        if values:
-            cursor.execute(qry, values)
-        else:
-            cursor.execute(qry)
-        data = cursor.fetchall()
-        conn.close()
-        return data
+        return self._run(qry, values)

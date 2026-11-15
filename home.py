@@ -6,7 +6,21 @@ app = Flask(__name__, static_folder="static")
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-only-change-me')
 mm = ar_master.master_flask_code()
+PUBLIC_PATHS = {'/admin_log', '/user_register', '/pdo_view'}
 
+@app.before_request
+def protect_pages():
+    path = request.path
+    role = session.get('role')
+    if path in PUBLIC_PATHS:
+        return None
+    if path.startswith('/admin_') and role != 'admin':
+        return redirect(url_for('homepage'))
+    if path.startswith('/pdo_') and role != 'pdo':
+        return redirect(url_for('homepage'))
+    if path.startswith('/user_') and role != 'user':
+        return redirect(url_for('homepage'))
+    return None
 
 
 
@@ -28,21 +42,17 @@ def admin():
     return render_template('admin.html')
 
 
-@app.route("/admin_log", methods = ['GET', 'POST'])
+@app.route("/admin_log", methods=['GET', 'POST'])
 def admin_log():
-    error = None
-
     if request.method == 'POST':
-        un = request.form['uname']
-        pa = request.form['pass']
-        print(un)
-        print(pa)
-        pa = pa.strip()
-        un = un.strip()
-        if un == "admin" and pa == "admin":
-            return render_template('admin_home.html', error=error)
-        else:
-            return render_template('admin.html',flash_message = True, data="error")
+        un = request.form['uname'].strip()
+        pa = request.form['pass'].strip()
+        admin_user = os.environ.get('ADMIN_USER', 'admin')
+        admin_pass = os.environ.get('ADMIN_PASSWORD', 'admin')
+        if un == admin_user and pa == admin_pass:
+            session['role'] = 'admin'
+            return render_template('admin_home.html', error=None)
+        return render_template('admin.html', flash_message=True, data="error")
     return render_template("admin.html")
 
 
@@ -151,32 +161,20 @@ def admin_add_pdo():
 
 
 
-@app.route("/pdo", methods = ['GET', 'POST'])
+@app.route("/pdo", methods=['GET', 'POST'])
 def pdo():
-    msg = None
     if request.method == 'POST':
         n = request.form['username']
         g = request.form['password']
-
-        n1 = str(n)
-        g1 = str(g)
-
-        q = ("SELECT * from pdo_details where username='" + str(n1) + "' and password='" + str(g1) + "'")
-        data = mm.select_direct_query(q)
-        data1=data
-
-
-
-        data = len(data)
-        if data == 0:
+        data = mm.select_direct_query2(
+            "SELECT * FROM pdo_details WHERE username=%s AND password=%s", (n, g))
+        if len(data) == 0:
             return render_template('pdo.html', flash_message=True, data="Failed")
-        else:
-            session['area'] = data1[0][4]
-            # print(data1[0][4])
-            msg = 'Success'
-            session['user'] = n
-            return render_template('pdo_home.html', sid=n)
-    return render_template('pdo.html', error=msg)
+        session['area'] = data[0][4]
+        session['user'] = n
+        session['role'] = 'pdo'
+        return render_template('pdo_home.html', sid=n)
+    return render_template('pdo.html', error=None)
 
 
 
@@ -199,54 +197,35 @@ def get_voting_status():
     session['voting_status'] = voting_status  # Keep session in sync
     return jsonify({'voting_status': voting_status})
 
-@app.route("/user", methods = ['GET', 'POST'])
+@app.route("/user", methods=['GET', 'POST'])
 def user():
-    msg = None
     if request.method == 'POST':
         n = request.form['username']
         g = request.form['password']
-    
-        n1 = str(n)
-        g1 = str(g)
-
-        q = ("SELECT * from user_details where username='" + str(n1) + "' and password='" + str(g1) + "'")
-        v = ("SELECT status FROM voting_status")
-        data = mm.select_direct_query(q)
-        data1 = mm.select_direct_query(q)
-
-        data = len(data)
-        if data == 0:
+        data = mm.select_direct_query2(
+            "SELECT * FROM user_details WHERE username=%s AND password=%s", (n, g))
+        if len(data) == 0:
             return render_template('user.html', flash_message=True, data="Failed")
-        else:
-            area = data1[0][3]
-            session['area'] = area
-            msg = 'Success'
-            session['user'] = n
-        
-            return render_template('user_home.html')
-    return render_template('user.html', error=msg)
+        session['area'] = data[0][3]
+        session['user'] = n
+        session['role'] = 'user'
+        return render_template('user_home.html')
+    return render_template('user.html', error=None)
 
 
 
-@app.route("/user_register", methods = ['GET', 'POST'])
+@app.route("/user_register", methods=['GET', 'POST'])
 def user_register():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        address = request.form['address']
-        gender = request.form['gender']
-        contact = request.form['contact']
-        username = request.form['username']
-        password = request.form['password']
+        f = request.form
         maxin = mm.find_max_id("user_details")
-        qq = "insert into user_details values('" + str(maxin) + "','" + str(name) + "','" + str(email) + "','" + str(
-                address) + "','" + str(gender) + "','" + str(contact) + "','" + str(username) + "','" + str(password) + "','0','0')"
-        result = mm.insert_query(qq)
-
-        if (result == 1):
-            return render_template('user.html', flash_message = True, data="Success")
-        else:
-            return render_template('user_register.html')
+        result = mm.insert_query2(
+            "INSERT INTO user_details VALUES (%s,%s,%s,%s,%s,%s,%s,%s,'0','0')",
+            (maxin, f['name'], f['email'], f['address'], f['gender'],
+             f['contact'], f['username'], f['password']))
+        if result == 1:
+            return render_template('user.html', flash_message=True, data="Success")
+        return render_template('user_register.html')
     return render_template('user_register.html')
 
 
@@ -905,5 +884,5 @@ def get_chatbot_response():
 
 ######################################
 if __name__ == '__main__':
-    # app.run(debug=True, use_reloader=True)
-    app.run(host='0.0.0.0', port=4500,debug=True, use_reloader=True)
+    app.run(host='127.0.0.1', port=4500,
+            debug=os.environ.get('FLASK_DEBUG') == '1')

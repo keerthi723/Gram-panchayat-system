@@ -63,7 +63,7 @@ This was my B.E. final-year project. It was demonstrated locally, and I have sin
 | -------- | -------------------------------------------------------- |
 | Frontend | HTML, CSS, JavaScript, Jinja2 templates                  |
 | Backend  | Python 3, Flask                                          |
-| Database | MySQL (run locally through XAMPP), accessed with PyMySQL |
+| Database | MySQL (TiDB Cloud for the hosted demo), accessed with PyMySQL |
 | Tools    | VS Code, Git, GitHub                                     |
 
 ## Run it locally
@@ -123,7 +123,7 @@ Gram-panchayat-system/
 
 - Passwords are stored as plain text in this demo database. I plan to hash them.
 - Some other forms still build SQL strings and will be converted to parameterized queries.
-- There is no hosted demo yet. It runs locally.
+- The hosted demo runs on free plans, so it sleeps when idle.
 
 ## What I learned
 

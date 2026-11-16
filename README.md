@@ -1,5 +1,5 @@
 # Digital Gram Panchayat: E-Services System
-**Live demo:** [https://YOUR-LINK.onrender.com](https://gram-panchayat-c6ga.onrender.com)
+**Live demo:** (https://gram-panchayat-c6ga.onrender.com)
 
 > Hosted on free plans (Render for the app, TiDB Cloud for the MySQL database), so the first page load can take up to a minute. All data is fake demo data.
 >

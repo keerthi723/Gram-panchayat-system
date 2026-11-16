@@ -10,7 +10,7 @@ class master_flask_code:
         self.port = int(os.environ.get('DB_PORT', '3306'))
         self.database = os.environ.get('DB_NAME', 'python_digital_gram_panchayat')
 
-        def connect(self):
+    def connect(self):
         options = {}
         ca = os.environ.get('DB_SSL_CA')
         if ca:
@@ -20,6 +20,7 @@ class master_flask_code:
                                host=self.host, port=self.port,
                                database=self.database, charset='utf8',
                                **options)
+
     def _run(self, qry, values=None, write=False):
         conn = self.connect()
         try:
@@ -39,8 +40,8 @@ class master_flask_code:
         data = self._run("SELECT id FROM " + table)
         return len(data) + 1
 
-    def insert_query(self, qry):
-        return self._run(qry, write=True)
+    def insert_query(self, qry, values=None):
+        return self._run(qry, values, write=True)
 
     def insert_query2(self, qry, values=None):
         return self._run(qry, values, write=True)
@@ -51,8 +52,8 @@ class master_flask_code:
     def select_single_colum(self, table, colum):
         return self._run("select " + colum + " from " + table)
 
-    def select_direct_query(self, qry):
-        return self._run(qry)
+    def select_direct_query(self, qry, values=None):
+        return self._run(qry, values)
 
     def select_direct_query2(self, qry, values=None):
         return self._run(qry, values)

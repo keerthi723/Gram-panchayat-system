@@ -1,4 +1,9 @@
 # Digital Gram Panchayat: E-Services System
+**Live demo:** [https://YOUR-LINK.onrender.com](https://gram-panchayat-c6ga.onrender.com)
+
+> Hosted on free plans (Render for the app, TiDB Cloud for the MySQL database), so the first page load can take up to a minute. All data is fake demo data.
+>
+> Demo logins: citizen `ram` / `123456`, PDO `suresh` / `12345678`. The admin login is available on request.
 
 A web application built with **Python and Flask** that digitizes everyday services of a Gram Panchayat (village administration). Villagers can use the portal instead of visiting the office for each task, and the Panchayat Development Officer (PDO) and admin manage everything from their own dashboards.
 
